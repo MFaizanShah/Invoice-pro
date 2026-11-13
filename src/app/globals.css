@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { @apply bg-ink-50 font-sans text-ink-900; }
+  h1, h2, h3 { @apply font-display; text-wrap: balance; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="number"] { -moz-appearance: textfield; }
+  :focus-visible { outline: 2px solid #257B84; outline-offset: 2px; }
+  ::selection { background: #D6EAEB; }
+}
+
+@layer components {
+  .card { @apply rounded-xl border border-ink-200 bg-white; }
+  .label { @apply mb-1.5 block text-[13px] font-medium text-ink-600; }
+  .input {
+    @apply w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none transition-colors
+           placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 disabled:bg-ink-50 disabled:text-ink-500;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary { @apply btn bg-brand-700 text-white hover:bg-brand-800; }
+  .btn-ghost { @apply btn border border-ink-200 bg-white text-ink-800 hover:border-ink-300 hover:bg-ink-50; }
+  .btn-quiet { @apply btn text-ink-600 hover:bg-ink-100 hover:text-ink-900; }
+  .btn-danger { @apply btn border border-late-200 bg-white text-late-600 hover:bg-late-50; }
+  .th { @apply px-5 py-2.5 text-left text-[13px] font-medium text-ink-500; }
+  .td { @apply px-5 py-3.5 text-sm; }
+  .num { font-variant-numeric: tabular-nums lining-nums; }
+  .page-title { @apply font-display text-[2rem] font-semibold leading-tight tracking-tight; }
+  .section-title { @apply font-display text-lg font-semibold tracking-tight; }
+
+  /* Inline fields on the invoice paper */
+  .paper-input {
+    @apply w-full rounded border border-transparent bg-transparent px-2 py-1 text-sm text-ink-900 outline-none transition-colors
+           placeholder:text-ink-300 hover:border-ink-200 hover:bg-ink-50/70 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/15
+           disabled:hover:border-transparent disabled:hover:bg-transparent;
+  }
+
+  /* The invoice paper uses a plain Helvetica look, like a printed document */
+  .paper { font-family: Helvetica, "Helvetica Neue", Arial, sans-serif; }
+
+  /* Rubber stamp on the invoice paper */
+  .stamp {
+    @apply select-none rounded-md border-[3px] px-4 py-1 font-display text-2xl font-bold uppercase;
+    letter-spacing: .14em;
+    transform: rotate(-9deg);
+    opacity: .82;
+    mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.72) 100%);
+  }
+}
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+.toast-in { animation: toast-in .18s ease-out; }
+.pop-in { animation: pop-in .14s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .toast-in, .pop-in { animation: none; }
+  * { transition-duration: 0s !important; }
+}
+
+/* Print: only the invoice paper, on clean A4 */
+.print-only { display: none; }
+@media print {
+  @page { size: A4; margin: 0; }
+  html, body { background: #fff !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .paper-scroll { overflow: visible !important; padding: 0 !important; }
+  .paper { box-shadow: none !important; border: 0 !important; border-radius: 0 !important; margin: 0 !important;
+           max-width: none !important; min-width: 0 !important; width: 210mm; min-height: 296mm; }
+  .paper-input { border-color: transparent !important; background: transparent !important; resize: none; }
+  .paper-input::placeholder { color: transparent; }
+  input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
+  .app-main { padding: 0 !important; margin: 0 !important; }
+  .app-shell { display: block !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
